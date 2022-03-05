@@ -1,26 +1,25 @@
-let div = document.getElementById("tasksContainer");
 let addTasks = document.getElementById("addTasks");
 let removeTasks = document.getElementById("removeTasks");
 let errorMsg = document.getElementById("errorMsg");
-let input = document.getElementById("inputTask");
-let tasksQnt = document.getElementsByClassName("taskContent");
+let inputTask = document.getElementById("inputTask");
+let qtdTasks = document.getElementsByClassName("task");
+let tasksContent = document.getElementById("tasksContent");
 
 onload = function () {
-    let dDado = localStorage.getItem("divDado");
-    let cDado = JSON.parse(dDado);
+    let tasksData = localStorage.getItem("tasksData");
 
-    div.innerHTML = cDado;
+    tasksContent.innerHTML = JSON.parse(tasksData);
 
     let removeButton = document.getElementsByClassName("removeButton");
     for (let rB of removeButton) {
-        rB.addEventListener("click", removeTask);
+        rB.addEventListener("click", removeSingleTask);
     }
 };
 
 function addTask() {
-    let valor = input.value;
+    let task = inputTask.value;
 
-    if (valor === "" || valor === " ") {
+    if (task === "" || task === " ") {
         errorMsg.style.visibility = "visible";
         errorMsg.style.opacity = "100%";
         errorMsg.innerText = "*INSIRA UMA TAREFA*";
@@ -28,35 +27,32 @@ function addTask() {
         errorMsg.style.opacity = "0%";
         errorMsg.style.visibility = "hidden";
 
-        div.innerHTML = "<div class='taskContent'> <h1 id='tarefa'></h1> <button class='removeButton'>x</button> </div>" + div.innerHTML;
+        tasksContent.innerHTML =
+            "<div class='task'> <h1 id='taskTitle'></h1> <button class='removeButton'>x</button> </div>" + tasksContent.innerHTML;
 
-        let h1 = document.getElementById("tarefa");
-        h1.innerText = valor;
+        let taskTitle = document.getElementById("taskTitle");
+        taskTitle.innerText = task;
 
-        let divDado = JSON.stringify(div.innerHTML);
-
-        localStorage.setItem("divDado", divDado);
+        localStorage.setItem("tasksData", JSON.stringify(tasksContent.innerHTML));
 
         addTasks.addEventListener("click", onload());
 
-        input.value = "";
+        inputTask.value = "";
     }
 }
 
-function removeTask() {
+function removeSingleTask() {
     let button = this;
     let remove = button.parentElement;
     remove.remove();
 
-    let divDado = JSON.stringify(div.innerHTML);
-
-    localStorage.setItem("divDado", divDado);
+    localStorage.setItem("tasksData", JSON.stringify(tasksContent.innerHTML));
 }
 
 function removeAllTasks() {
-    if (tasksQnt.length > 0) {
-        console.log(tasksQnt);
-        div.innerHTML = "";
+    if (qtdTasks.length > 0) {
+        console.log(qtdTasks);
+        tasksContent.innerHTML = "";
         localStorage.clear();
     } else {
         errorMsg.style.visibility = "visible";
