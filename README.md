@@ -34,6 +34,8 @@ Esta página é fruto de uma indicação de projeto no curso de desenvolvimento 
  </tr>
 </table>
 
+<p align="center"><a href="https://thgomes1.github.io/to-do-list/">TESTE A PÁGINA AQUI</a></p>
+
 # :computer: Tecnologias
 
 -   <p>HTML5</p>
