@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,12 +20,12 @@
     <header id="headerContainer" class="cC">
       <nav id="headerContent" class="cC">
         <h1>To-Do-List</h1>
-        <input type="text" id="inputTask" placeholder="Insert your task" />
+        <input type="text" id="inputTask" data-task="input" placeholder="Insert your task" />
         <section id="navButtons">
-          <button id="addTasks">ADD TASK</button>
-          <button id="removeTasks">REMOVE TASKS</button>
+          <button data-task="add">ADD TASK</button>
+          <button data-task="clear">REMOVE TASKS</button>
         </section>
-        <p id="errorMsg">----</p>
+        <p data-task="error">INSERT THE TASK!</p>
       </nav>
     </header>
 
@@ -36,7 +35,7 @@
     </section>
 
     <!--FOOTER-->
-    <footer id="footerContainer" class="c">
+    <footer class="footer c">
       <a href="">
         <p>Desenvolvido por Thiago Gomes - <i class="fab fa-github"></i> Github</p>
       </a>
@@ -44,46 +43,4 @@
   </body>
 
   <script type="module" src="./js/script.js"></script>
-=======
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>To-Do-List</title>
-        <link rel="stylesheet" href="./css/style.css" />
-        <style>
-            @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap");
-        </style>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    </head>
-
-    <body>
-        <!--HEADER-->
-        <header id="headerContainer" class="cC">
-            <nav id="headerContent" class="cC">
-                <h1>To-Do-List</h1>
-                <input type="text" id="inputTask" placeholder="Insert your task" />
-                <section id="navButtons">
-                    <button id="addTasks">ADD TASK</button>
-                    <button id="removeTasks">REMOVE TASKS</button>
-                </section>
-                <p id="errorMsg">----</p>
-            </nav>
-        </header>
-
-        <!--SECTION-TASKS-->
-        <section id="tasksContainer" class="c">
-            <article id="tasksContent" class="cC"></article>
-        </section>
-
-        <!--FOOTER-->
-        <footer id="footerContainer" class="c">
-            <a href="">
-                <p>Desenvolvido por Thiago Gomes - <i class="fab fa-github"></i> Github</p>
-            </a>
-        </footer>
-    </body>
-
-    <script src="./js/script.js"></script>
->>>>>>> 6ef45ed110d99d6048620a52de5952c4176b5b15
 </html>
