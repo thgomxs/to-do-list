@@ -7,8 +7,7 @@ export default class ToDoList {
     this.info = document.querySelector('[data-task="info"]');
 
     // Local onde irão ser armazenadas as tasks da to-do-list
-    this.tasks = document.querySelector(tasks);
-    this.completeTasks = JSON.parse(localStorage.getItem('infoData')) || 0;
+    this.tasksContainer = document.querySelector(tasks);
 
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
@@ -17,20 +16,30 @@ export default class ToDoList {
   }
 
   loadData() {
-    const tasksData = localStorage.getItem('tasksData');
-    this.tasks.innerHTML = JSON.parse(tasksData);
-    this.info.innerHTML = this.completeTasks;
+    this.tasksArray = JSON.parse(localStorage.getItem('tasksData')) || [];
+    this.completeTasks = JSON.parse(localStorage.getItem('infoData')) || 0;
 
-    if (this.tasks.childElementCount > 0) {
-      this.addRemoveButtonsEvent();
-      this.addCheckBoxesEvent();
-    }
+    this.renderTasks();
   }
 
   saveData() {
-    localStorage.setItem('tasksData', JSON.stringify(this.tasks.innerHTML));
+    localStorage.setItem('tasksData', JSON.stringify(this.tasksArray));
     localStorage.setItem('infoData', JSON.stringify(this.completeTasks));
   }
+
+  renderTasks() {
+    this.tasksContainer.innerHTML = '';
+
+    this.tasksArray.forEach((task) => {
+      this.tasksContainer.innerHTML += `<div class='task'><input type="checkbox" data-task="checkbox" ${task.status}>  <h1>${task.title}</h1> <button data-task='remove' class='removeButton '>X</button> </div>`;
+    });
+    this.info.innerHTML = this.completeTasks;
+
+    this.addRemoveButtonsEvent();
+    this.addCheckBoxesEvent();
+  }
+
+  // ADD TASK, REMOVE TASK E CLEAR TASKS
 
   addTask() {
     const task = this.input.value;
@@ -38,67 +47,73 @@ export default class ToDoList {
     if (!task) {
       this.error.classList.add('active');
       this.error.innerText = '*INSIRA UMA TAREFA*';
-    } else {
+    }
+    if (task) {
       this.error.classList.remove('active');
-      this.tasks.innerHTML += `<div class='task'><input type="checkbox" data-task="checkbox">  <h1>${task}</h1> <button data-task='remove' class='removeButton '>X</button> </div>`;
-
-      this.saveData();
-      this.addRemoveButtonsEvent();
-      this.addCheckBoxesEvent();
+      this.tasksArray.push({
+        title: task,
+        status: '',
+      });
+      this.updateInfo();
     }
 
     this.input.value = '';
   }
 
+  removeTask({ currentTarget }) {
+    const taskText = currentTarget.parentElement.querySelector('h1');
+    const taskCheckBox = currentTarget.parentElement.querySelector('input[type="checkbox"]');
+    this.tasksArray = this.tasksArray.filter((task) => task.title !== taskText.innerText);
+
+    if (taskCheckBox.checked) --this.completeTasks;
+    this.updateInfo();
+  }
+
   clearTasks() {
-    if (this.tasks.children.length === 0) {
+    if (this.tasksContainer.children.length === 0) {
       this.error.classList.add('active');
       this.error.innerText = '*SEM TAREFAS PARA REMOVER*';
     }
 
-    if (this.tasks.children.length > 0) {
-      this.tasks.innerHTML = '';
-      localStorage.clear();
+    if (this.tasksContainer.children.length > 0) {
+      this.error.classList.remove('active');
+      this.tasksContainer.innerHTML = '';
+      this.tasksArray = [];
+      this.completeTasks = 0;
+      this.updateInfo();
     }
-
-    localStorage.removeItem('infoData');
-    this.completeTasks = 0;
-    this.updateInfo();
   }
+
+  // UPDATE
 
   updateInfo() {
     this.info.innerText = this.completeTasks;
     this.saveData();
+    this.renderTasks();
   }
 
   updateTask({ currentTarget: taskCheckBox }) {
-    const taskText = taskCheckBox.parentElement.children[1];
+    const taskText = taskCheckBox.parentElement.querySelector('h1');
+    const taskIndex = this.tasksArray.findIndex((task) => task.title === taskText.innerText);
 
     if (taskCheckBox.checked) {
-      taskText.style.textDecoration = 'line-through';
-      taskCheckBox.setAttribute('checked', '');
+      this.tasksArray[taskIndex].status = 'checked';
       ++this.completeTasks;
     }
 
     if (!taskCheckBox.checked) {
-      taskText.style.textDecoration = 'none';
-      taskCheckBox.removeAttribute('checked');
+      this.tasksArray[taskIndex].status = '';
       --this.completeTasks;
     }
 
     this.updateInfo();
   }
 
+  // EVENTS
+
   addCheckBoxesEvent() {
     this.checkBoxes = document.querySelectorAll('[data-task="checkbox"]');
     this.checkBoxes.forEach((checkBox) => checkBox.addEventListener('change', this.updateTask));
-  }
-
-  removeTask({ currentTarget }) {
-    currentTarget.parentElement.remove();
-
-    if (currentTarget.parentElement.children[0].checked) --this.completeTasks;
-    this.updateInfo();
   }
 
   addRemoveButtonsEvent() {
