@@ -60,6 +60,10 @@ export default class ToDoList {
       this.tasks.innerHTML = '';
       localStorage.clear();
     }
+
+    localStorage.removeItem('infoData');
+    this.completeTasks = 0;
+    this.updateInfo();
   }
 
   updateInfo() {
@@ -92,8 +96,8 @@ export default class ToDoList {
 
   removeTask({ currentTarget }) {
     currentTarget.parentElement.remove();
-    --this.completeTasks;
-    console.log(this.completeTasks);
+
+    if (currentTarget.parentElement.children[0].checked) --this.completeTasks;
     this.updateInfo();
   }
 
