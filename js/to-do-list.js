@@ -4,24 +4,32 @@ export default class ToDoList {
     this.clearButton = document.querySelector('[data-task="clear"]');
     this.error = document.querySelector('[data-task="error"]');
     this.input = document.querySelector('[data-task="input"]');
+    this.info = document.querySelector('[data-task="info"]');
 
     // Local onde irão ser armazenadas as tasks da to-do-list
     this.tasks = document.querySelector(tasks);
+    this.completeTasks = JSON.parse(localStorage.getItem('infoData')) || 0;
 
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
+    this.updateTask = this.updateTask.bind(this);
     this.clearTasks = this.clearTasks.bind(this);
   }
 
   loadData() {
     const tasksData = localStorage.getItem('tasksData');
     this.tasks.innerHTML = JSON.parse(tasksData);
+    this.info.innerHTML = this.completeTasks;
 
-    if (this.tasks.childElementCount > 0) this.addRemoveButtonsEvent();
+    if (this.tasks.childElementCount > 0) {
+      this.addRemoveButtonsEvent();
+      this.addCheckBoxesEvent();
+    }
   }
 
   saveData() {
     localStorage.setItem('tasksData', JSON.stringify(this.tasks.innerHTML));
+    localStorage.setItem('infoData', JSON.stringify(this.completeTasks));
   }
 
   addTask() {
@@ -32,18 +40,14 @@ export default class ToDoList {
       this.error.innerText = '*INSIRA UMA TAREFA*';
     } else {
       this.error.classList.remove('active');
-      this.tasks.innerHTML += `<div class='task'> <h1>${task}</h1> <button data-task='remove' class='removeButton'>x</button> </div>`;
+      this.tasks.innerHTML += `<div class='task'><input type="checkbox" data-task="checkbox">  <h1>${task}</h1> <button data-task='remove' class='removeButton '>X</button> </div>`;
 
       this.saveData();
       this.addRemoveButtonsEvent();
+      this.addCheckBoxesEvent();
     }
 
     this.input.value = '';
-  }
-
-  removeTask({ currentTarget }) {
-    currentTarget.parentElement.remove();
-    this.saveData();
   }
 
   clearTasks() {
@@ -56,6 +60,41 @@ export default class ToDoList {
       this.tasks.innerHTML = '';
       localStorage.clear();
     }
+  }
+
+  updateInfo() {
+    this.info.innerText = this.completeTasks;
+    this.saveData();
+  }
+
+  updateTask({ currentTarget: taskCheckBox }) {
+    const taskText = taskCheckBox.parentElement.children[1];
+
+    if (taskCheckBox.checked) {
+      taskText.style.textDecoration = 'line-through';
+      taskCheckBox.setAttribute('checked', '');
+      ++this.completeTasks;
+    }
+
+    if (!taskCheckBox.checked) {
+      taskText.style.textDecoration = 'none';
+      taskCheckBox.removeAttribute('checked');
+      --this.completeTasks;
+    }
+
+    this.updateInfo();
+  }
+
+  addCheckBoxesEvent() {
+    this.checkBoxes = document.querySelectorAll('[data-task="checkbox"]');
+    this.checkBoxes.forEach((checkBox) => checkBox.addEventListener('change', this.updateTask));
+  }
+
+  removeTask({ currentTarget }) {
+    currentTarget.parentElement.remove();
+    --this.completeTasks;
+    console.log(this.completeTasks);
+    this.updateInfo();
   }
 
   addRemoveButtonsEvent() {

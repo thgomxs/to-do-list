@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do-List</title>
+    <title>TO DO LIST!</title>
     <link rel="stylesheet" href="./css/style.css" />
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300&display=swap');
@@ -16,28 +16,31 @@
   </head>
 
   <body>
-    <!--HEADER-->
-    <header id="headerContainer" class="cC">
-      <nav id="headerContent" class="cC">
-        <h1>To-Do-List</h1>
-        <input type="text" id="inputTask" data-task="input" placeholder="Insert your task" />
-        <section id="navButtons">
-          <button data-task="add">ADD TASK</button>
-          <button data-task="clear">REMOVE TASKS</button>
-        </section>
+    <div class="to-do-list">
+      <!--HEADER-->
+      <header id="headerContainer" class="cC">
+        <h1>TO-DO LIST</h1>
+        <nav id="headerContent" class="c">
+          <input type="text" id="inputTask" data-task="input" placeholder="Insert your task" />
+          <section id="navButtons">
+            <button data-task="add">+</button>
+          </section>
+        </nav>
         <p data-task="error">INSERT THE TASK!</p>
-      </nav>
-    </header>
+      </header>
 
-    <!--SECTION-TASKS-->
-    <section id="tasksContainer" class="c">
-      <article id="tasksContent" class="cC"></article>
-    </section>
+      <!--SECTION-TASKS-->
+      <section id="tasksContainer" class="cC">
+        <article id="tasksContent" class="cC"></article>
+        <div>Tarefas concluidas: <span data-task="info">0</span></div>
+        <button data-task="clear">CLEAR</button>
+      </section>
+    </div>
 
     <!--FOOTER-->
     <footer class="footer c">
-      <a href="">
-        <p>Desenvolvido por Thiago Gomes - <i class="fab fa-github"></i> Github</p>
+      <a class="text" href="">
+        Desenvolvido por Thiago Gomes - <i class="text fab fa-github"></i> Github
       </a>
     </footer>
   </body>
